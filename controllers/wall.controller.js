@@ -11,6 +11,7 @@ class WallController {
         this.#req = req;
         this.#res = res;
     }
+    
     /**
      * DOCU: Function to render the wall view, fetch the user's datain session, and load all the messages and comments. <br/>
      * Triggered: After successfull login. <br/>
@@ -46,7 +47,6 @@ class WallController {
         }
         this.#req.session.save();
         this.#res.redirect("/wall");
-    }
 
     createComment = async () => {
         let post = new Post();
@@ -103,7 +103,6 @@ class WallController {
             return;
         }
     }
-
 
 
 }
