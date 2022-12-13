@@ -1,6 +1,8 @@
 const User = require("../models/user.js");
-const Message = require("../models/message.js");
-const Comment = require("../models/comment.js");
+const Post = require("../models/post.js");
+/**
+ * @class WallController
+ */
 class WallController {
     #req;
     #res;
@@ -9,46 +11,98 @@ class WallController {
         this.#req = req;
         this.#res = res;
     }
-
+    
+    /**
+     * DOCU: Function to render the wall view, fetch the user's datain session, and load all the messages and comments. <br/>
+     * Triggered: After successfull login. <br/>
+     * Last Updated Date: December 13, 2022.
+     * @async
+     * @function
+     * @author Aaron Aco
+     */
     wall = async () => {
-        let [data] = await User.loadProfile(this.#req.session.userid);
-        let all_messages = await Message.retrieve();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
-        for(let i = 0; i < all_messages.result.length; i++){
-            let d = new Date(all_messages.result[i].created_at).toLocaleDateString(undefined, options);
-            all_messages.result[i].created_at = d;
-            let all_comments = await Comment.retrieve(all_messages.result[i].id);
-            for(let j = 0; j < all_comments.result.length; j++){
-                let d = new Date(all_comments.result[i].created_at).toLocaleDateString(undefined, options);
-                all_comments.result[j].created_at = d;
-            }
-            all_messages.result[i]['comments'] = all_comments.result;
+        this.validateSession();
+
+        if(this.#req.session.alert){
+            var alert =  this.#req.session.alert;
+            delete this.#req.session.alert;
         }
-
-
-        this.#res.render("wall.ejs", {userdata : data, all_messages: all_messages.result});
+        let user_data = this.#req.session.user;
+        let wall = new Post();
+        let posts = await wall.retrieve();
+        this.#res.render("wall.ejs" , {user_data : user_data, posts : posts, alert: alert});
     }
     createMessage = async () => {
-        let create_message = await Message.create(this.#req.session.userid, this.#req.body);
+        let post = new Post();
+        let create_message = await post.create(this.#req.session.user.uid, this.#req.body);
+        if(create_message.status){
+            this.#req.session.alert =  {
+                title: "Success! Your message has been posted!",
+                message: null};
+        }else{
+            this.#req.session.alert =  {
+                title: create_message.error,
+                message: create_message.result};
+        }
+        this.#req.session.save();
         this.#res.redirect("/wall");
-    }
 
     createComment = async () => {
-        let create_comment = await Comment.create(this.#req.session.userid, this.#req.body);
+        let post = new Post();
+        let create_comment = await post.reply(this.#req.session.user.uid, this.#req.body);
+        if(create_comment.status){
+            this.#req.session.alert =  {
+                title: "Success! Your comment has been posted!",
+                message: null};
+        }else{
+            this.#req.session.alert =  {
+                title: create_comment.error,
+                message: create_comment.result};
+        }
+        this.#req.session.save();
         this.#res.redirect("/wall");
     }
 
     deleteComment = async () => {
-        let delete_comment = await Comment.delete(this.#req.body);
+        let post = new Post();
+        let delete_comment = await post.deleteComment(this.#req.body);
+        if(delete_comment.status){
+            this.#req.session.alert =  {
+                title: "Success! Your comment has been deleted!",
+                message: null};
+        }else{
+            this.#req.session.alert =  {
+                title: delete_comment.error,
+                message: delete_comment.result};
+        }
+        this.#req.session.save();
         this.#res.redirect("/wall");
     }
+
 
     deleteMessage = async () => {
-        let delete_message = await Message.delete(this.#req.body);
+        let post = new Post();
+        let delete_message = await post.deleteMessage(this.#req.body);
+        if(delete_message.status){
+            this.#req.session.alert =  {
+                title: "Success! Your message has been deleted!",
+                message: null};
+        }else{
+            this.#req.session.alert =  {
+                title: delete_message.error,
+                message: delete_message.result};
+        }
+        this.#req.session.save();
         this.#res.redirect("/wall");
     }
 
+    validateSession(){
+        if(!this.#req.session.user){
+            this.#res.redirect("/");
+            return;
+        }
+    }
 
 
 }

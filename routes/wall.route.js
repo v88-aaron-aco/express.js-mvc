@@ -9,8 +9,8 @@ WallRoute.get("/wall", (req, res) => { new WallController(req, res).wall(); });
 
 
 WallRoute.get("/logout", (req, res) => { new ViewController(req, res).logout(); });
-WallRoute.post("/register", (req, res) => { new ViewController(req, res).register(); })
-WallRoute.post("/login", (req, res) => { new ViewController(req, res).login(); })
+WallRoute.post("/register", (req, res) => { new ViewController(req, res).register_proccess(); })
+WallRoute.post("/login", (req, res) => { new ViewController(req, res).login_proccess(); })
 
 WallRoute.post("/createMessage", (req, res) => { new WallController(req, res).createMessage(); })
 WallRoute.post("/createComment", (req, res) => { new WallController(req, res).createComment(); })

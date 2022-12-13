@@ -9,6 +9,13 @@
     <script src="/assets/js/login.js"></script>
 </head>
 <body>
+    <!-- Display alerts for errors etc. -->
+<% if(alert){ %>
+        <p><%= alert.title %></p>
+<% for(let index in alert.message){ %>
+        <p><%= alert.message[index] %> </p>
+<% } }%>
+
     <div id="wrapper">
         <form action="/login" id="login_form" method="POST" >
             <input type="text" name="email_address" value="cpadua@village88.com">
