@@ -9,11 +9,14 @@
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
+    "jsdoc": "^4.0.0",
     "md5": "^2.3.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "sha1": "^1.1.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "doc": "./node_modules/.bin/jsdoc -d docs --configure jsdoc_conf.json -r ../wall_activity_attempt2"
   },
   "author": "",
   "license": "ISC"

@@ -6,7 +6,7 @@ constant.DATABASE = {
     host: "localhost",
     user: "root",
     password: "",
-    database: "wall",
+    database: "jsmysql",
     connectionLimit: 50,
     port: "3306"
 }
