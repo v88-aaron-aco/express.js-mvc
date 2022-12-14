@@ -33,6 +33,7 @@ class WallController {
         let posts = await wall.retrieve();
         this.#res.render("wall.ejs" , {user_data : user_data, posts : posts, alert: alert});
     }
+
     createMessage = async () => {
         let post = new Post();
         let create_message = await post.create(this.#req.session.user.uid, this.#req.body);
@@ -47,6 +48,7 @@ class WallController {
         }
         this.#req.session.save();
         this.#res.redirect("/wall");
+    }
 
     createComment = async () => {
         let post = new Post();
@@ -97,13 +99,20 @@ class WallController {
         this.#res.redirect("/wall");
     }
 
+    /**
+     * DOCU: Function to check if the user is logged in to prevent access to unathorized pages. <br/>
+     * Triggered: When the user directly access a page through the url. <br/>
+     * Last Updated Date: December 14, 2022.
+     * @function
+     * @returns {void}
+     * @author Aaron Aco
+     */
     validateSession(){
         if(!this.#req.session.user){
             this.#res.redirect("/");
             return;
         }
     }
-
 
 }
 
