@@ -1,3 +1,6 @@
+/**
+ * @todo add documentation.
+ */
 const { Router }     = require("express");
 const ViewController = require("../controllers/view.controller");
 const WallController = require("../controllers/wall.controller");
