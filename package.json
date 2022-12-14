@@ -16,7 +16,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "doc": "./node_modules/.bin/jsdoc -d docs --configure jsdoc_conf.json -r ../wall_activity_attempt2"
+    "doc": "./node_modules/.bin/jsdoc -d docs --configure jsdoc_conf.json -r ../express.js-mvc"
   },
   "author": "",
   "license": "ISC"

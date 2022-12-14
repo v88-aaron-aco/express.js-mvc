@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/wall.controller.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/wall.controller.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @todo Add more documentation
+ */
+const User = require("../models/user.js");
+const Post = require("../models/post.js");
+/**
+ * @class WallController
+ */
+class WallController {
+    #req;
+    #res;
+    
+    constructor(req, res){
+        this.#req = req;
+        this.#res = res;
+    }
+    
+    /**
+     * DOCU: Function to render the wall view, fetch the user's datain session, and load all the messages and comments. &lt;br/>
+     * Triggered: After successfull login. &lt;br/>
+     * Last Updated Date: December 13, 2022.
+     * @async
+     * @function
+     * @author Aaron Aco
+     */
+    wall = async () => {
+
+        this.validateSession();
+
+        if(this.#req.session.alert){
+            var alert =  this.#req.session.alert;
+            delete this.#req.session.alert;
+        }
+        let user_data = this.#req.session.user;
+        let wall = new Post();
+        let posts = await wall.retrieve();
+        this.#res.render("wall.ejs" , {user_data : user_data, posts : posts, alert: alert});
+    }
+
+    createMessage = async () => {
+        let post = new Post();
+        let create_message = await post.create(this.#req.session.user.uid, this.#req.body);
+        if(create_message.status){
+            this.#req.session.alert =  {
+                title: "Success! Your message has been posted!",
+                message: null};
+        }else{
+            this.#req.session.alert =  {
+                title: create_message.error,
+                message: create_message.result};
+        }
+        this.#req.session.save();
+        this.#res.redirect("/wall");
+    }
+
+    createComment = async () => {
+        let post = new Post();
+        let create_comment = await post.reply(this.#req.session.user.uid, this.#req.body);
+        if(create_comment.status){
+            this.#req.session.alert =  {
+                title: "Success! Your comment has been posted!",
+                message: null};
+        }else{
+            this.#req.session.alert =  {
+                title: create_comment.error,
+                message: create_comment.result};
+        }
+        this.#req.session.save();
+        this.#res.redirect("/wall");
+    }
+
+    deleteComment = async () => {
+        let post = new Post();
+        let delete_comment = await post.deleteComment(this.#req.body);
+        if(delete_comment.status){
+            this.#req.session.alert =  {
+                title: "Success! Your comment has been deleted!",
+                message: null};
+        }else{
+            this.#req.session.alert =  {
+                title: delete_comment.error,
+                message: delete_comment.result};
+        }
+        this.#req.session.save();
+        this.#res.redirect("/wall");
+    }
+
+
+    deleteMessage = async () => {
+        let post = new Post();
+        let delete_message = await post.deleteMessage(this.#req.body);
+        if(delete_message.status){
+            this.#req.session.alert =  {
+                title: "Success! Your message has been deleted!",
+                message: null};
+        }else{
+            this.#req.session.alert =  {
+                title: delete_message.error,
+                message: delete_message.result};
+        }
+        this.#req.session.save();
+        this.#res.redirect("/wall");
+    }
+
+    /**
+     * DOCU: Function to check if the user is logged in to prevent access to unathorized pages. &lt;br/>
+     * Triggered: When the user directly access a page through the url. &lt;br/>
+     * Last Updated Date: December 14, 2022.
+     * @function
+     * @returns {void}
+     * @author Aaron Aco
+     */
+    validateSession(){
+        if(!this.#req.session.user){
+            this.#res.redirect("/");
+            return;
+        }
+    }
+
+}
+
+module.exports = WallController;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Post.html">Post</a></li><li><a href="global.html#User">User</a></li><li><a href="ViewController.html">ViewController</a></li><li><a href="WallController.html">WallController</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DBConnection">DBConnection</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Wed Dec 14 2022 18:12:48 GMT+0800 (China Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
