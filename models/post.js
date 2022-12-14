@@ -50,6 +50,7 @@ class Post{
      * @param {integer} user_id  - Requires the id of the user from the session
      * @param {object} form_data - Requires the message
      * @returns {object} response_data - {status: true|false, result: {object} | [array], error: any}
+     * @author Aaron Aco
      */
      async create (user_id,form_data) {
         let response_data = { status: false, result: null, error: null };
@@ -79,6 +80,7 @@ class Post{
      * @param {integer} user_id  - Requires the user id from the session
      * @param {object} form_data  - Requires the comment
      * @returns {object} - response_data {status: false|true, result: {object} | [array], error: any}
+     * @author Aaron Aco
      */
      async reply (user_id,form_data) {
         let response_data = { status: false, result: null, error: null };
