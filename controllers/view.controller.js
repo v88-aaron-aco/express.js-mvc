@@ -108,24 +108,19 @@ class ViewController {
         this.#res.redirect("/");
     };
 
+    /**
+     * DOCU: Function to check if the user is logged in to prevent access to unathorized pages. <br/>
+     * Triggered: When the user directly access a page through the url. <br/>
+     * Last Updated Date: December 14, 2022.
+     * @function
+     * @returns {void}
+     * @author Aaron Aco
+     */
     validateSession(){
         if(this.#req.session.user){
             this.#res.redirect("/wall");
             return;
         }
-    }
-
-    register = async () => {
-        let result = await User.create(this.#req.body);
-        if(result){
-           console.log('You may now log in!');
-           this.#res.redirect("/");
-        }
-    }
-
-    logout = async () => {
-        delete this.#req.session.user;
-        this.#res.redirect("/");
     }
 }
 
