@@ -1,3 +1,6 @@
+/**
+ * @todo Add more documentation
+ */
 const User = require("../models/user.js");
 
 /**

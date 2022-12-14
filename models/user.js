@@ -1,3 +1,6 @@
+/**
+ * @todo Add more documentation
+ */
 const DBConnection = require("./connection.js");
 const Mysql = require("mysql");
 const Sha1 = require("sha1");
